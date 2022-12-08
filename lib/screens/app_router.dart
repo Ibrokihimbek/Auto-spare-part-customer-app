@@ -1,4 +1,6 @@
 import 'package:auto_spare_part/main.dart';
+import 'package:auto_spare_part/screens/admin/admin_page.dart';
+import 'package:auto_spare_part/screens/admin/category/add_category_page.dart';
 import 'package:auto_spare_part/screens/bottom_nav/bottom_navigation_page.dart';
 import 'package:auto_spare_part/screens/splash/splash_page.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,8 @@ abstract class RouteName {
   static const splash = 'splash';
   static const bottomNav = 'bottomNav';
   static const main = 'main';
-  static const register = 'register';
-  static const forgot = 'forgot';
+  static const addCategory = 'addCategory';
+  static const admin = 'admin';
   static const home = 'home';
   static const productInfo = 'productInfo';
   static const search = 'search';
@@ -28,10 +30,10 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => BottomNavPage());
       case RouteName.main:
         return MaterialPageRoute(builder: (_) => MainPage());
-      // case RoutName.forgot:
-      //   return MaterialPageRoute(builder: (_) => ForgotPage());
-      // case RoutName.main:
-      //   return MaterialPageRoute(builder: (_) => MainPage());
+      case RouteName.admin:
+        return MaterialPageRoute(builder: (_) => AdminPage());
+      case RouteName.addCategory:
+        return MaterialPageRoute(builder: (_) => AddCategoryPage());
       // case RoutName.checkout:
       //   return MaterialPageRoute(builder: (_) => CheckoutPaage());
       case RouteName.home:

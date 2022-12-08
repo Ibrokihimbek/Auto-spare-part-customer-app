@@ -1,9 +1,15 @@
 import 'package:auto_spare_part/data/app_repositroy/auth_repository.dart';
+import 'package:auto_spare_part/data/app_repositroy/categories_repository.dart';
+import 'package:auto_spare_part/data/app_repositroy/products_repository.dart';
+import 'package:auto_spare_part/screens/admin_or_home/admin_or_home.dart';
 import 'package:auto_spare_part/screens/app_router.dart';
 import 'package:auto_spare_part/screens/auth/auth_page.dart';
 import 'package:auto_spare_part/screens/bottom_nav/bottom_navigation_page.dart';
 import 'package:auto_spare_part/view_model/auth_view_model.dart';
 import 'package:auto_spare_part/view_model/bottom_nav_view_model.dart';
+import 'package:auto_spare_part/view_model/category_view_model.dart';
+import 'package:auto_spare_part/view_model/product_view_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -13,10 +19,22 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  var fireStore = FirebaseFirestore.instance;
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => BottomNavViewModel()),
+        ChangeNotifierProvider(
+          create: (context) => CategoryViewModel(
+            categoryRepository:
+                CategoryRepository(firebaseFirestore: fireStore),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductViewModel(
+            productRepository: ProductRepository(firebaseFirestore: fireStore),
+          ),
+        ),
         Provider(
           create: (context) => AuthViewModel(
             authRepository: AuthRepository(firebaseAuth: FirebaseAuth.instance),
@@ -61,7 +79,7 @@ class MainPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.hasData) {
-            return BottomNavPage();
+            return AdminOrHomePage();
           } else {
             return AuthPage();
           }

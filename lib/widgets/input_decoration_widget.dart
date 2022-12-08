@@ -6,8 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 InputDecoration getInputDecoration({required String label}) {
   return InputDecoration(
     labelText: label,
-    labelStyle:
-        fontPoppinsW400(appcolor: AppColors.white).copyWith(fontSize: 16.sp),
+    labelStyle: fontPoppinsW400(
+      appcolor: AppColors.white.withOpacity(0.5),
+    ).copyWith(fontSize: 16.sp),
     border: const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       borderSide: BorderSide(

@@ -66,9 +66,7 @@ class _SignInPageState extends State<SignInPage> {
                         label: 'Password',
                         onTap: () {
                           setState(() {
-                            setState(() {
-                              isPas = !isPas;
-                            });
+                            isPas = !isPas;
                           });
                         },
                         isPas: isPas),
