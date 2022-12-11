@@ -33,11 +33,15 @@ class _AdminPageState extends State<AdminPage> {
               children: [
                 buttonWidgetbyHomrOrAdmin(
                     onTap: () {
-                      Navigator.pushNamed(context, RouteName.addCategory);
+                      Navigator.pushNamed(context, RouteName.showCategory);
                     },
                     buttonName: 'Categories'),
                 SizedBox(height: 12.h),
-                buttonWidgetbyHomrOrAdmin(onTap: () {}, buttonName: 'Products'),
+                buttonWidgetbyHomrOrAdmin(
+                    onTap: () {
+                      Navigator.pushNamed(context, RouteName.showProduct);
+                    },
+                    buttonName: 'Products'),
               ],
             ),
           ),

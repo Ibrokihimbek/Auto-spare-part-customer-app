@@ -6,14 +6,21 @@ import 'package:flutter/cupertino.dart';
 
 class ProductViewModel extends ChangeNotifier {
   final ProductRepository productRepository;
-  ProductViewModel({required this.productRepository});
+  ProductViewModel({required this.productRepository}) {
+    listenProducts("");
+  }
 
   late StreamSubscription subscription;
 
   List<ProductModel> products = [];
+  List<ProductModel> productsAdmin = [];
+  ProductModel? product;
 
-  listenProducts() async {
-    subscription = productRepository.getProducts().listen((allProducts) {
+  listenProducts(String categoryId) async {
+    subscription = productRepository
+        .getProducts(categoryId: categoryId)
+        .listen((allProducts) {
+      if (categoryId.isEmpty) productsAdmin = allProducts;
       products = allProducts;
       notifyListeners();
     });

@@ -28,5 +28,7 @@ class AppImages {
   static const icon_settings = 'assets/icons/icon_settings.svg';
   static const icon_timer = 'assets/icons/icon_timer.svg';
   static const icon_cart = 'assets/icons/icon_cart.svg';
-
+  static const icon_camera_upload_photo =
+      'assets/icons/icon_camera_by_photo.svg';
+  static const icon_galery = 'assets/icons/icon_galarey.svg';
 }

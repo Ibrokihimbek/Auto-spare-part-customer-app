@@ -1,10 +1,9 @@
 class ProductModel {
   int count;
   int price;
-  List<String> productImages;
+  List<dynamic> productImages;
   String categoryId;
   String productId;
-  String shopId;
   String productName;
   String description;
   String createdAt;
@@ -16,7 +15,6 @@ class ProductModel {
     required this.productImages,
     required this.categoryId,
     required this.productId,
-    required this.shopId,
     required this.productName,
     required this.description,
     required this.createdAt,
@@ -27,10 +25,9 @@ class ProductModel {
     return ProductModel(
       count: jsonData['count'] as int? ?? 0,
       price: jsonData['price'] as int? ?? 0,
-      productImages: (jsonData['productImages'] as List<String>? ?? []),
+      productImages: (jsonData['productImages'] as List<dynamic>? ?? []),
       categoryId: jsonData['categoryId'] as String? ?? '',
       productId: jsonData['productId'] as String? ?? '',
-      shopId: jsonData['shopId'] as String? ?? '',
       productName: jsonData['productName'] as String? ?? '',
       description: jsonData['description'] as String? ?? '',
       createdAt: jsonData['createdAt'] as String? ?? '',
@@ -45,7 +42,6 @@ class ProductModel {
       'productImages': productImages,
       'categoryId': categoryId,
       'productId': productId,
-      'shopId': shopId,
       'productName': productName,
       'description': description,
       'createdAt': createdAt,
@@ -61,7 +57,6 @@ class ProductModel {
       productImages: $productImages,
       categoryId: $categoryId,
       productId: $productId,
-      shopId: $shopId,
       productName: $productName,
       description: $description,
       createdAt: $createdAt,
@@ -87,7 +82,6 @@ class ProductModel {
         productImages: productImages ?? this.productImages,
         categoryId: categoryId ?? this.categoryId,
         productId: productId ?? this.productId,
-        shopId: shopId ?? this.shopId,
         productName: productName ?? this.productName,
         description: description ?? this.description,
         createdAt: createdAt ?? this.createdAt,

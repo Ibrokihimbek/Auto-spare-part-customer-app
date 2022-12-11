@@ -42,10 +42,23 @@ class ProductRepository {
     }
   }
 
-  Stream<List<ProductModel>> getProducts() =>
-      _firestore.collection("products").snapshots().map(
+  Stream<List<ProductModel>> getProducts({required String categoryId}) async* {
+    if (categoryId.isEmpty) {
+      yield* _firestore.collection("products").snapshots().map(
             (querySnapshot) => querySnapshot.docs
                 .map((doc) => ProductModel.fromJson(doc.data()))
                 .toList(),
           );
+    } else {
+      yield* _firestore
+          .collection("products")
+          .where("categoryId", isEqualTo: categoryId)
+          .snapshots()
+          .map(
+            (querySnapshot) => querySnapshot.docs
+                .map((doc) => ProductModel.fromJson(doc.data()))
+                .toList(),
+          );
+    }
+  }
 }

@@ -6,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 
 class CategoryViewModel extends ChangeNotifier {
   final CategoryRepository categoryRepository;
-  CategoryViewModel({required this.categoryRepository});
+  CategoryViewModel({required this.categoryRepository}) {
+    listenCategories();
+  }
 
   late StreamSubscription subscription;
 
