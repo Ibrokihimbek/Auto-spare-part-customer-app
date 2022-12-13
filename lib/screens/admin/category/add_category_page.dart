@@ -49,89 +49,92 @@ class _AddCategoryPageState extends State<AddCategoryPage> {
         backgroundColor: Colors.transparent,
         body: Form(
           key: formKey,
-          child: SafeArea(
-            child: Consumer<CategoryViewModel>(
-              builder: ((context, categoryViewModel, child) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24).r,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 24.h),
-                      Text(
-                        'Mahsulot nomi',
-                        style: fontPoppinsW400(appcolor: AppColors.white)
-                            .copyWith(fontSize: 14.sp),
-                      ),
-                      SizedBox(height: 8.h),
-                      TextFormField(
-                        controller: addCategoryCantroller,
-                        textInputAction: TextInputAction.next,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (category) =>
-                            category != null && category.length < 6
-                                ? "Mahsulot nomini 6 ta belgidan ko'p kiriting"
-                                : null,
-                        style: fontPoppinsW400(appcolor: AppColors.white),
-                        decoration: getInputDecoration(
-                            label: 'Mahsulot nomini kiriting'),
-                      ),
-                      SizedBox(height: 24.h),
-                      Text(
-                        "Mahsulot haqida ma'lumot",
-                        style: fontPoppinsW400(appcolor: AppColors.white)
-                            .copyWith(fontSize: 14.sp),
-                      ),
-                      SizedBox(height: 8.h),
-                      TextFormField(
-                        maxLines: 4,
-                        controller: addCategoryDescriptionCantroller,
-                        textInputAction: TextInputAction.next,
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        validator: (category) =>
-                            category != null && category.length < 6
-                                ? "Ma'lumotni 6 ta belgidan ko'p kiriting"
-                                : null,
-                        style: fontPoppinsW400(appcolor: AppColors.white),
-                        decoration: getInputDecoration(
-                            label: "Mahsulot haqida ma'lumot kiriting"),
-                      ),
-                      SizedBox(height: 30.h),
-                      buttonLargeWidget(
-                          onTap: () {
-                            _showPicker(context);
-                          },
-                          buttonName: 'kategoryaga rasm tanlash'),
-                      SizedBox(height: 8.h),
-                      buttonLargeWidget(
-                          onTap: () {
-                            CategoryModel categoryModel = CategoryModel(
-                              categoryId: "",
-                              categoryName: addCategoryCantroller.text,
-                              description:
-                                  addCategoryDescriptionCantroller.text,
-                              imageUrl: imageUrl.isEmpty
-                                  ? AppImages.image_car
-                                  : imageUrl,
-                              createdAt: DateTime.now().toString(),
-                            );
-                            Provider.of<CategoryViewModel>(context,
-                                    listen: false)
-                                .addCategory(categoryModel);
-                            Navigator.pop(context);
-                          },
-                          buttonName: 'Add Category'),
-                      Container(
-                        width: 100,
-                        height: 100,
-                        child: imageUrl.isEmpty
-                            ? Image.asset(AppImages.image_car)
-                            : Image.network(imageUrl),
-                      )
-                    ],
-                  ),
-                );
-              }),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: SafeArea(
+              child: Consumer<CategoryViewModel>(
+                builder: ((context, categoryViewModel, child) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24).r,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 24.h),
+                        Text(
+                          'Mahsulot nomi',
+                          style: fontPoppinsW400(appcolor: AppColors.white)
+                              .copyWith(fontSize: 14.sp),
+                        ),
+                        SizedBox(height: 8.h),
+                        TextFormField(
+                          controller: addCategoryCantroller,
+                          textInputAction: TextInputAction.next,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (category) =>
+                              category != null && category.length < 6
+                                  ? "Mahsulot nomini 6 ta belgidan ko'p kiriting"
+                                  : null,
+                          style: fontPoppinsW400(appcolor: AppColors.white),
+                          decoration: getInputDecoration(
+                              label: 'Mahsulot nomini kiriting'),
+                        ),
+                        SizedBox(height: 24.h),
+                        Text(
+                          "Mahsulot haqida ma'lumot",
+                          style: fontPoppinsW400(appcolor: AppColors.white)
+                              .copyWith(fontSize: 14.sp),
+                        ),
+                        SizedBox(height: 8.h),
+                        TextFormField(
+                          maxLines: 4,
+                          controller: addCategoryDescriptionCantroller,
+                          textInputAction: TextInputAction.next,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (category) =>
+                              category != null && category.length < 6
+                                  ? "Ma'lumotni 6 ta belgidan ko'p kiriting"
+                                  : null,
+                          style: fontPoppinsW400(appcolor: AppColors.white),
+                          decoration: getInputDecoration(
+                              label: "Mahsulot haqida ma'lumot kiriting"),
+                        ),
+                        SizedBox(height: 30.h),
+                        buttonLargeWidget(
+                            onTap: () {
+                              _showPicker(context);
+                            },
+                            buttonName: 'kategoryaga rasm tanlash'),
+                        SizedBox(height: 8.h),
+                        buttonLargeWidget(
+                            onTap: () {
+                              CategoryModel categoryModel = CategoryModel(
+                                categoryId: "",
+                                categoryName: addCategoryCantroller.text,
+                                description:
+                                    addCategoryDescriptionCantroller.text,
+                                imageUrl: imageUrl.isEmpty
+                                    ? AppImages.image_car
+                                    : imageUrl,
+                                createdAt: DateTime.now().toString(),
+                              );
+                              Provider.of<CategoryViewModel>(context,
+                                      listen: false)
+                                  .addCategory(categoryModel);
+                              Navigator.pop(context);
+                            },
+                            buttonName: 'Add Category'),
+                        Container(
+                          width: 100,
+                          height: 100,
+                          child: imageUrl.isEmpty
+                              ? Image.asset(AppImages.image_car)
+                              : Image.network(imageUrl),
+                        )
+                      ],
+                    ),
+                  );
+                }),
+              ),
             ),
           ),
         ),

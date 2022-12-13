@@ -1,3 +1,4 @@
+import 'package:auto_spare_part/screens/bottom_nav/cart/cart_page.dart';
 import 'package:auto_spare_part/screens/bottom_nav/home/home_page.dart';
 import 'package:auto_spare_part/screens/bottom_nav/profile/profile_page.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
@@ -22,7 +23,7 @@ class _BottomNavPageState extends State<BottomNavPage> {
   @override
   void initState() {
     screens.add(HomePage());
-    screens.add(Container());
+    screens.add(CartPage());
     screens.add(ProfilePage());
     super.initState();
   }

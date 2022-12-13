@@ -31,4 +31,6 @@ class AppImages {
   static const icon_camera_upload_photo =
       'assets/icons/icon_camera_by_photo.svg';
   static const icon_galery = 'assets/icons/icon_galarey.svg';
+  static const icon_arrow_down = 'assets/icons/icon_arrow_down.svg';
+  static const icon_arrpw_up = 'assets/icons/icon_arroe_up.svg';
 }

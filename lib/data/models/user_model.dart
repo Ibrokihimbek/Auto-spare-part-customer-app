@@ -4,6 +4,7 @@ class UserModel {
   String fullName;
   String email;
   String createdAt;
+  String imageUrl;
 
   UserModel({
     required this.age,
@@ -11,6 +12,7 @@ class UserModel {
     required this.fullName,
     required this.email,
     required this.createdAt,
+    required this.imageUrl,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> josnData) {
@@ -19,6 +21,7 @@ class UserModel {
       userId: josnData['userId'] as String? ?? '',
       fullName: josnData['fullName'] as String? ?? '',
       email: josnData['email'] as String? ?? '',
+      imageUrl: josnData['imageUrl'] as String? ?? '',
       createdAt: josnData['createdAt'] as String? ?? '',
     );
   }
@@ -30,6 +33,7 @@ class UserModel {
       'fullName': fullName,
       'email': email,
       'createdAt': createdAt,
+      'imageUrl': imageUrl,
     };
   }
 
@@ -41,25 +45,7 @@ class UserModel {
       fullName : $fullName,
       email : $email,
       createdAt : $createdAt,
+      imageUrl : $imageUrl,
       ''';
   }
-
-  UserModel copyWith({
-    int? age,
-    String? userId,
-    String? fullName,
-    String? email,
-    String? createdAt,
-  }) =>
-      UserModel(
-        age: age ?? this.age,
-        userId: userId ?? this.userId,
-        fullName: fullName ?? this.fullName,
-        email: email ?? this.email,
-        createdAt: createdAt ?? this.createdAt,
-      );
-
-  
-
 }
-

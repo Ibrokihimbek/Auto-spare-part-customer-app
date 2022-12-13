@@ -5,18 +5,20 @@ import 'package:auto_spare_part/data/app_repositroy/products_repository.dart';
 import 'package:auto_spare_part/screens/admin_or_home/admin_or_home.dart';
 import 'package:auto_spare_part/screens/app_router.dart';
 import 'package:auto_spare_part/screens/auth/auth_page.dart';
-import 'package:auto_spare_part/screens/bottom_nav/bottom_navigation_page.dart';
 import 'package:auto_spare_part/view_model/auth_view_model.dart';
 import 'package:auto_spare_part/view_model/bottom_nav_view_model.dart';
 import 'package:auto_spare_part/view_model/category_view_model.dart';
 import 'package:auto_spare_part/view_model/order_view_model.dart';
 import 'package:auto_spare_part/view_model/product_view_model.dart';
+import 'package:auto_spare_part/view_model/profile_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+
+import 'data/app_repositroy/user_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,8 +40,16 @@ void main() async {
           ),
         ),
         ChangeNotifierProvider(
-          create: (context) => OrderViewModel(
-            orderRepository: OrderRepository(firebaseFirestore: fireStore),
+          create: (context) => OrdersViewModel(
+            ordersRepository: OrdersRepository(
+              firebaseFirestore: fireStore,
+            ),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileViewModel(
+            firebaseAuth: FirebaseAuth.instance,
+            profileRepository: ProfileRepository(firebaseFirestore: fireStore)
           ),
         ),
         Provider(
