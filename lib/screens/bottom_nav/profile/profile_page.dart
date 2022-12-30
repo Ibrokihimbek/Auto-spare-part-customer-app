@@ -19,7 +19,6 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final ImagePicker _picker = ImagePicker();
-  XFile? _image;
   String imageUrl = "";
   bool isLoading = false;
   @override
@@ -77,7 +76,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 Row(
                   children: [
                     InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        FirebaseAuth.instance.signOut();
+                      },
                       child: SizedBox(
                         height: 48.h,
                         child: Row(
@@ -150,7 +151,6 @@ class _ProfilePageState extends State<ProfilePage> {
       imageUrl = await FileUploader.imageUploader(pickedFile, 'profileImages');
       setState(() {
         isLoading = false;
-        _image = pickedFile;
       });
     }
   }
@@ -165,7 +165,6 @@ class _ProfilePageState extends State<ProfilePage> {
       if (!mounted) return;
       imageUrl = await FileUploader.imageUploader(pickedFile, 'profileImages');
       setState(() {
-        _image = pickedFile;
       });
     }
   }

@@ -15,12 +15,15 @@ InputDecoration getInputDecoration({required String label}) {
         width: 1,
       ),
     ),
-    enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.white)),
-    focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.white)),
-    errorBorder: const OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.white)),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(width: 1.w, color: Colors.white),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(width: 1.w, color: Colors.white),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(width: 1.w, color: Colors.white),
+    ),
   );
 }
 
@@ -35,17 +38,20 @@ InputDecoration getInputDecorationByPassword(
     labelText: label,
     labelStyle:
         fontPoppinsW400(appcolor: AppColors.white).copyWith(fontSize: 16.sp),
-    border: const OutlineInputBorder(
-      borderRadius: BorderRadius.all(Radius.circular(4)),
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.all(Radius.circular(4.r)),
       borderSide: BorderSide(
-        width: 1,
+        width: 1.w,
       ),
     ),
-    enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.white)),
-    focusedBorder: const OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.white)),
-    errorBorder: const OutlineInputBorder(
-        borderSide: BorderSide(width: 1, color: Colors.white)),
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(width: 1.w, color: Colors.white),
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderSide: BorderSide(width: 1.w, color: Colors.white),
+    ),
+    errorBorder: OutlineInputBorder(
+      borderSide: BorderSide(width: 1.w, color: Colors.white),
+    ),
   );
 }

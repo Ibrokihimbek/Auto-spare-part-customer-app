@@ -2,9 +2,9 @@ import 'package:auto_spare_part/data/app_repositroy/auth_repository.dart';
 import 'package:auto_spare_part/data/app_repositroy/categories_repository.dart';
 import 'package:auto_spare_part/data/app_repositroy/order_repository.dart';
 import 'package:auto_spare_part/data/app_repositroy/products_repository.dart';
-import 'package:auto_spare_part/screens/admin_or_home/admin_or_home.dart';
 import 'package:auto_spare_part/screens/app_router.dart';
 import 'package:auto_spare_part/screens/auth/auth_page.dart';
+import 'package:auto_spare_part/screens/bottom_nav/bottom_navigation_page.dart';
 import 'package:auto_spare_part/view_model/auth_view_model.dart';
 import 'package:auto_spare_part/view_model/bottom_nav_view_model.dart';
 import 'package:auto_spare_part/view_model/category_view_model.dart';
@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import 'data/app_repositroy/user_repository.dart';
+import 'data/app_repositroy/profile_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,9 +48,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => ProfileViewModel(
-            firebaseAuth: FirebaseAuth.instance,
-            profileRepository: ProfileRepository(firebaseFirestore: fireStore)
-          ),
+              firebaseAuth: FirebaseAuth.instance,
+              profileRepository:
+                  ProfileRepository(firebaseFirestore: fireStore)),
         ),
         Provider(
           create: (context) => AuthViewModel(
@@ -96,7 +96,7 @@ class MainPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, AsyncSnapshot<User?> snapshot) {
           if (snapshot.hasData) {
-            return AdminOrHomePage();
+            return BottomNavPage();
           } else {
             return AuthPage();
           }

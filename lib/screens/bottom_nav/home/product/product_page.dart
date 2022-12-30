@@ -54,7 +54,7 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget productItem(ProductModel product) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0).r,
       child: InkWell(
         onTap: () {
           Navigator.pushNamed(context, RouteName.productInfo, arguments: {'singleProduct': product});
@@ -65,7 +65,7 @@ class _ProductPageState extends State<ProductPage> {
             color: AppColors.C_FAFAFA.withOpacity(0.50),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0).r,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

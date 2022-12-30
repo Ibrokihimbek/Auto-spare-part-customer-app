@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Widget PostIndicatorWidget({required int currentIndex, required int itemCount}) {
   return Container(
-    margin: const EdgeInsets.only(right: 24),
+    margin: const EdgeInsets.only(right: 24).r,
     height: 10.h,
     child: ListView.separated(
       shrinkWrap: true,

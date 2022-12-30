@@ -1,16 +1,19 @@
-import 'package:animated_snack_bar/animated_snack_bar.dart';
+import 'package:auto_spare_part/data/models/user_model.dart';
 import 'package:auto_spare_part/screens/auth/widgets/login_widgets.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
 import 'package:auto_spare_part/utils/app_images.dart';
 import 'package:auto_spare_part/view_model/auth_view_model.dart';
+import 'package:auto_spare_part/view_model/profile_view_model.dart';
 import 'package:auto_spare_part/widgets/font_style_widget.dart';
 import 'package:auto_spare_part/widgets/input_decoration_widget.dart';
 import 'package:auto_spare_part/widgets/toast_widget.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback onClickedSignIn;
@@ -149,7 +152,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  signUp() {
+  signUp() async {
     final isValid = formKey.currentState!.validate();
     if (!isValid) return;
 
@@ -158,9 +161,23 @@ class _SignUpPageState extends State<SignUpPage> {
     String confirmPassword = confirmPasswordController.text.trim();
 
     if (confirmPassword == password) {
-      Provider.of<AuthViewModel>(context, listen: false).signUp(
+      await Provider.of<AuthViewModel>(context, listen: false).signUp(
         email: email,
         password: password,
+      );
+      String? fcmToken = await FirebaseMessaging.instance.getToken();
+      if (!mounted) return;
+      Provider.of<ProfileViewModel>(context, listen: false).addUser(
+        UserModel(
+          docId: "",
+          age: 0,
+          userId: FirebaseAuth.instance.currentUser!.uid,
+          fullName: "",
+          email: email,
+          createdAt: DateTime.now().toString(),
+          imageUrl: "",
+          fcmToken: fcmToken ?? "",
+        ),
       );
     } else {
       getMyToast(message: "Passwords don't match!");

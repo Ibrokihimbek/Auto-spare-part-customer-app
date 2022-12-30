@@ -1,17 +1,11 @@
-import 'package:auto_spare_part/data/models/order_model.dart';
 import 'package:auto_spare_part/data/models/product_model.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
-import 'package:auto_spare_part/utils/app_images.dart';
 import 'package:auto_spare_part/utils/time_utils.dart';
-import 'package:auto_spare_part/view_model/order_view_model.dart';
-import 'package:auto_spare_part/widgets/button_large.dart';
 import 'package:auto_spare_part/widgets/font_style_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'widgets/post_indicator_widget.dart';
@@ -26,7 +20,6 @@ class ProductInfoPage extends StatefulWidget {
 
 class _ProductInfoPageState extends State<ProductInfoPage> {
   int currentIndex = 0;
-  int count = 1;
   PageController pageController = PageController();
   @override
   Widget build(BuildContext context) {
@@ -67,7 +60,7 @@ class _ProductInfoPageState extends State<ProductInfoPage> {
               ),
               SizedBox(height: 12.h),
               SizedBox(
-                width: 400,
+                width: 400.w,
                 height: 200.h,
                 child: PageView.builder(
                   onPageChanged: (index) {
@@ -86,7 +79,7 @@ class _ProductInfoPageState extends State<ProductInfoPage> {
                       height: 80.h,
                       child: CachedNetworkImage(
                         imageUrl: widget.productModel.productImages[index],
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         placeholder: (context, url) {
                           return Shimmer.fromColors(
                             period: const Duration(seconds: 2),
@@ -120,7 +113,7 @@ class _ProductInfoPageState extends State<ProductInfoPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12).r,
                 child: Text(
-                  'Description',
+                  'Mahsulot haqida maʼlumot:',
                   style: fontPoppinsW500(appcolor: AppColors.white),
                 ),
               ),
@@ -139,41 +132,9 @@ class _ProductInfoPageState extends State<ProductInfoPage> {
               SizedBox(height: 24.h),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12).r,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Nraxi:  ${widget.productModel.price} ${widget.productModel.currency}',
-                      style: fontPoppinsW600(appcolor: AppColors.C_FFC567),
-                    ),
-                    Row(
-                      children: [
-                        InkWell(
-                            onTap: () {
-                              setState(() {
-                                if (count > 1) {
-                                  count--;
-                                }
-                              });
-                            },
-                            child: buttonCotrol(AppImages.icon_arrow_down)),
-                        SizedBox(width: 8.w),
-                        Text(
-                          '$count',
-                          style: fontPoppinsW400(appcolor: AppColors.white)
-                              .copyWith(fontSize: 13.sp),
-                        ),
-                        SizedBox(width: 8.w),
-                        InkWell(
-                            onTap: () {
-                              setState(() {
-                                count++;
-                              });
-                            },
-                            child: buttonCotrol(AppImages.icon_arrpw_up)),
-                      ],
-                    ),
-                  ],
+                child: Text(
+                  'Nraxi:  ${widget.productModel.price} ${widget.productModel.currency}',
+                  style: fontPoppinsW600(appcolor: AppColors.C_FFC567),
                 ),
               ),
               Padding(
@@ -182,48 +143,6 @@ class _ProductInfoPageState extends State<ProductInfoPage> {
                   'Soni:  ${widget.productModel.count} ta',
                   style: fontPoppinsW400(appcolor: AppColors.white),
                 ),
-              ),
-              Spacer(),
-              Padding(
-                padding:
-                    const EdgeInsets.only(right: 12, left: 12, bottom: 24).r,
-                child: buttonLargeWidget(
-                    onTap: () {
-                      List<OrderModel> orders =
-                          Provider.of<OrdersViewModel>(context, listen: false)
-                              .userOrders;
-
-                      List<OrderModel> exists = orders
-                          .where((e) =>
-                              e.productId == widget.productModel.productId)
-                          .toList();
-
-                      if (exists.isNotEmpty) {
-                        for (var element in orders) {
-                          if (element.productId ==
-                              widget.productModel.productId) {
-                            Provider.of<OrdersViewModel>(context, listen: false)
-                                .updateOrderIfExists(
-                                    productId: element.productId, count: count);
-                          }
-                        }
-                      } else {
-                        Provider.of<OrdersViewModel>(context, listen: false)
-                            .addOrder(
-                          OrderModel(
-                            count: count,
-                            totalPrice: widget.productModel.price * count,
-                            orderId: "",
-                            productId: widget.productModel.productId,
-                            userId: FirebaseAuth.instance.currentUser!.uid,
-                            orderStatus: "ordered",
-                            createdAt: DateTime.now().toString(),
-                            productName: widget.productModel.productName,
-                          ),
-                        );
-                      }
-                    },
-                    buttonName: 'Add to cart'),
               ),
             ],
           ),
@@ -238,7 +157,7 @@ class _ProductInfoPageState extends State<ProductInfoPage> {
       height: 30.h,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(color: AppColors.white, width: 1),
+        border: Border.all(color: AppColors.white, width: 1.w),
       ),
       child: Center(
         child: SvgPicture.asset(
