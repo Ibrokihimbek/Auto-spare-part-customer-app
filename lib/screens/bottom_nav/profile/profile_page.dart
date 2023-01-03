@@ -1,3 +1,4 @@
+import 'package:auto_spare_part/data/models/user_model.dart';
 import 'package:auto_spare_part/data/service/file_uploader.dart';
 import 'package:auto_spare_part/screens/bottom_nav/profile/widgets/profile_menu_widget.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
@@ -6,6 +7,7 @@ import 'package:auto_spare_part/view_model/profile_view_model.dart';
 import 'package:auto_spare_part/widgets/button_large.dart';
 import 'package:auto_spare_part/widgets/font_style_widget.dart';
 import 'package:auto_spare_part/widgets/input_decoration_widget.dart';
+import 'package:auto_spare_part/widgets/toast_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -23,6 +25,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   TextEditingController controller = TextEditingController();
   final ImagePicker _picker = ImagePicker();
+  String userName = '';
   String imageUrl = "";
   bool isLoading = false;
   @override
@@ -34,7 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
         child: SafeArea(
           child: Consumer<ProfileViewModel>(
             builder: (context, viewModel, child) {
-              return viewModel.user != null
+              var userInfo = viewModel.userModel;
+              return viewModel.userModel != null
                   ? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 24).r,
                       child: Column(
@@ -45,21 +49,24 @@ class _ProfilePageState extends State<ProfilePage> {
                             height: 100.h,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              image: viewModel.user!.photoURL == null
+                              image: userInfo!.imageUrl == ''
                                   ? const DecorationImage(
                                       image: AssetImage(AppImages.image_car),
                                       fit: BoxFit.cover,
                                     )
                                   : DecorationImage(
                                       image: NetworkImage(
-                                          viewModel.user!.photoURL!),
+                                        userInfo.imageUrl,
+                                      ),
                                       fit: BoxFit.cover,
                                     ),
                             ),
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            viewModel.userModel?.email ?? 'pff',
+                            userInfo.fullName.isEmpty
+                                ? 'Foydalanuvchi nomi'
+                                : userInfo.fullName,
                             style: fontPoppinsW500(appcolor: AppColors.white)
                                 .copyWith(fontSize: 20.sp),
                           ),
@@ -110,8 +117,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                                   Provider.of<ProfileViewModel>(
                                                           context,
                                                           listen: false)
-                                                      .updateDisplayName(
-                                                          controller.text);
+                                                      .updateUser(UserModel(
+                                                    age: userInfo.age,
+                                                    userId: userInfo.userId,
+                                                    docId: userInfo.docId,
+                                                    fullName: controller.text,
+                                                    email: userInfo.email,
+                                                    createdAt: DateTime.now()
+                                                        .toString(),
+                                                    imageUrl: userInfo.imageUrl,
+                                                    fcmToken: userInfo.fcmToken,
+                                                  ));
+
                                                   Navigator.pop(context);
                                                 },
                                                 buttonName: "O'zgartirish"),
@@ -128,7 +145,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             iconSettings: AppImages.icon_camera,
                             settingsName: "Suratni o'zgartirish",
                             onTap: () {
-                              _showPicker(context);
+                              _showPicker(context, userInfo);
                             },
                           ),
                           Row(
@@ -169,7 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _showPicker(context) {
+  void _showPicker(context, UserModel userModel) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -183,7 +200,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     title: const Text("Gallery"),
                     onTap: () {
-                      _getFromGallery();
+                      _getFromGallery(userModel);
                       Navigator.of(context).pop();
                     }),
                 ListTile(
@@ -193,7 +210,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   title: const Text('Camera'),
                   onTap: () {
-                    _getFromCamera();
+                    _getFromCamera(userModel);
                     Navigator.of(context).pop();
                   },
                 ),
@@ -203,7 +220,7 @@ class _ProfilePageState extends State<ProfilePage> {
         });
   }
 
-  _getFromGallery() async {
+  _getFromGallery(UserModel userInfo) async {
     XFile? pickedFile = await _picker.pickImage(
       maxWidth: 1000,
       maxHeight: 1000,
@@ -213,16 +230,28 @@ class _ProfilePageState extends State<ProfilePage> {
       if (!mounted) return;
       setState(() {
         isLoading = true;
+        getMyToast(message: 'Rasm yuklanmoqda');
       });
-      if (!mounted) return;
       imageUrl = await FileUploader.imageUploader(pickedFile, 'profileImages');
-      if (!mounted) return;
-      Provider.of<ProfileViewModel>(context, listen: false)
-          .updatePhoto(imageUrl);
+      Provider.of<ProfileViewModel>(context, listen: false).updateUser(
+        UserModel(
+          age: userInfo.age,
+          userId: userInfo.userId,
+          docId: userInfo.docId,
+          fullName: userInfo.fullName,
+          email: userInfo.email,
+          createdAt: DateTime.now().toString(),
+          imageUrl: imageUrl,
+          fcmToken: userInfo.fcmToken,
+        ),
+      );
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
-  _getFromCamera() async {
+  _getFromCamera(UserModel userInfo) async {
     XFile? pickedFile = await _picker.pickImage(
       maxWidth: 1920,
       maxHeight: 2000,
@@ -230,10 +259,26 @@ class _ProfilePageState extends State<ProfilePage> {
     );
     if (pickedFile != null) {
       if (!mounted) return;
+      setState(() {
+        isLoading = true;
+        getMyToast(message: 'Rasm yuklanmoqda');
+      });
       imageUrl = await FileUploader.imageUploader(pickedFile, 'profileImages');
-      if (!mounted) return;
-      Provider.of<ProfileViewModel>(context, listen: false)
-          .updatePhoto(imageUrl);
+      Provider.of<ProfileViewModel>(context, listen: false).updateUser(
+        UserModel(
+          age: userInfo.age,
+          userId: userInfo.userId,
+          docId: userInfo.docId,
+          fullName: userInfo.fullName,
+          email: userInfo.email,
+          createdAt: DateTime.now().toString(),
+          imageUrl: imageUrl,
+          fcmToken: userInfo.fcmToken,
+        ),
+      );
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

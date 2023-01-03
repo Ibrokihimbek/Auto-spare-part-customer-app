@@ -10,6 +10,7 @@ class ProfileRepository {
   ProfileRepository({required FirebaseFirestore firebaseFirestore})
       : _firestore = firebaseFirestore;
 
+  /// Add User
   Future<void> addUser({required UserModel userModel}) async {
     try {
       DocumentReference newUser =
@@ -24,32 +25,20 @@ class ProfileRepository {
     }
   }
 
-  Future<void> updateUserName({
-    required String fullName,
-    required String docId,
-  }) async {
+  /// Update UserInfo
+
+  Future<void> updateUserInfo({required UserModel userModel}) async {
     try {
-      await _firestore.collection('users').doc(docId).update({
-        "fullName": fullName,
-      });
+      await _firestore
+          .collection("users")
+          .doc(userModel.docId)
+          .update(userModel.toJson());
     } on FirebaseException catch (e) {
       getMyToast(message: e.message.toString());
     }
   }
 
-  Future<void> updateUserPhoto({
-    required String imageUrl,
-    required String docId,
-  }) async {
-    try {
-      await _firestore.collection('users').doc(docId).update({
-        "imageUrl": imageUrl,
-      });
-    } on FirebaseException catch (e) {
-      getMyToast(message: e.message.toString());
-    }
-  }
-
+  /// Update FCM token
   Future<void> updateUserFCMToken(
       {required String fcmToken,
       required String docId,
@@ -64,28 +53,12 @@ class ProfileRepository {
     }
   }
 
-  Future<UserModel?> getSingleUser({required String userId}) async {
-    UserModel? userModel;
-    _firestore
-        .collection("users")
-        .where("userId", isEqualTo: userId)
-        .snapshots()
-        .map(
-          (event1) =>
-              event1.docs.map((doc) => UserModel.fromJson(doc.data())).toList(),
-        )
-        .listen((event) {
-
-      print("USER INFOOOO: ${event.first}");
-
-      userModel = event.first;
-
-      print("USER INFOOOO TWO: $userModel");
-
-    });
-
-    print("USER INFOOOO THREE: $userModel");
-    
-    return userModel;
-  }
+  Stream<List<UserModel>> getAllUsers(String uid) => _firestore
+      .collection('users')
+      .where("userId", isEqualTo: uid)
+      .snapshots()
+      .map(
+        (snapshot) =>
+            snapshot.docs.map((doc) => UserModel.fromJson(doc.data())).toList(),
+      );
 }
