@@ -1,5 +1,6 @@
 import 'package:auto_spare_part/widgets/toast_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRepository {
   final FirebaseAuth _auth;
@@ -19,11 +20,13 @@ class AuthRepository {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
     } on FirebaseAuthException catch (error) {
-      getMyToast(message: error.message.toString());
+      getMyToast(message: "Parol yoki Email noto'gri kiritilgan");
     }
   }
 
   Stream<User?> authState() async* {
     yield* _auth.authStateChanges();
   }
+
+   
 }

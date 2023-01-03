@@ -37,7 +37,7 @@ InputDecoration getInputDecorationByPassword(
     ),
     labelText: label,
     labelStyle:
-        fontPoppinsW400(appcolor: AppColors.white).copyWith(fontSize: 16.sp),
+        fontPoppinsW400(appcolor: AppColors.white.withOpacity(0.5),).copyWith(fontSize: 16.sp),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(4.r)),
       borderSide: BorderSide(

@@ -1,14 +1,17 @@
-import 'dart:io';
 import 'package:auto_spare_part/data/service/file_uploader.dart';
 import 'package:auto_spare_part/screens/bottom_nav/profile/widgets/profile_menu_widget.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
 import 'package:auto_spare_part/utils/app_images.dart';
+import 'package:auto_spare_part/view_model/profile_view_model.dart';
+import 'package:auto_spare_part/widgets/button_large.dart';
 import 'package:auto_spare_part/widgets/font_style_widget.dart';
+import 'package:auto_spare_part/widgets/input_decoration_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -18,6 +21,7 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  TextEditingController controller = TextEditingController();
   final ImagePicker _picker = ImagePicker();
   String imageUrl = "";
   bool isLoading = false;
@@ -28,75 +32,137 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24).r,
-            child: Column(
-              children: [
-                SizedBox(height: 20.h),
-                Container(
-                  width: 100.w,
-                  height: 100.h,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    image: imageUrl.isEmpty
-                        ? const DecorationImage(
-                            image: AssetImage(AppImages.image_car),
-                            fit: BoxFit.cover)
-                        : DecorationImage(
-                            image: NetworkImage(imageUrl), fit: BoxFit.cover),
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  "${FirebaseAuth.instance.currentUser?.email.toString()}",
-                  style: fontPoppinsW500(appcolor: AppColors.white)
-                      .copyWith(fontSize: 20.sp),
-                ),
-                SizedBox(height: 32.h),
-                ProfileMenuWidget(
-                  menuName: 'Account',
-                  iconSettings: AppImages.icon_profile,
-                  settingsName: 'Change account name',
-                  onTap: () {},
-                ),
-                ProfileMenuWidget(
-                  menuName: null,
-                  iconSettings: AppImages.icon_key,
-                  settingsName: 'Change account password',
-                  onTap: () {},
-                ),
-                ProfileMenuWidget(
-                  menuName: null,
-                  iconSettings: AppImages.icon_camera,
-                  settingsName: 'Change account Image',
-                  onTap: () {
-                    _showPicker(context);
-                  },
-                ),
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        FirebaseAuth.instance.signOut();
-                      },
-                      child: SizedBox(
-                        height: 48.h,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SvgPicture.asset(AppImages.icon_log_out),
-                            SizedBox(width: 10.w),
-                            Text('Log out',
-                                style:
-                                    fontPoppinsW400(appcolor: AppColors.white)),
-                          ],
-                        ),
+          child: Consumer<ProfileViewModel>(
+            builder: (context, viewModel, child) {
+              return viewModel.user != null
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 24).r,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 20.h),
+                          Container(
+                            width: 100.w,
+                            height: 100.h,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: viewModel.user!.photoURL == null
+                                  ? const DecorationImage(
+                                      image: AssetImage(AppImages.image_car),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : DecorationImage(
+                                      image: NetworkImage(
+                                          viewModel.user!.photoURL!),
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            viewModel.userModel?.email ?? 'pff',
+                            style: fontPoppinsW500(appcolor: AppColors.white)
+                                .copyWith(fontSize: 20.sp),
+                          ),
+                          SizedBox(height: 32.h),
+                          ProfileMenuWidget(
+                            iconSettings: AppImages.icon_profile,
+                            settingsName: "Nomni o'zgartirish",
+                            onTap: () {
+                              showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (context) {
+                                  return Dialog(
+                                    backgroundColor: AppColors.C_393B40,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(15.r),
+                                        border: Border.all(
+                                          color: AppColors.white,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      height: 200,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 8,
+                                        ).r,
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 12.h),
+                                            TextFormField(
+                                              controller: controller,
+                                              textInputAction:
+                                                  TextInputAction.next,
+                                              autovalidateMode: AutovalidateMode
+                                                  .onUserInteraction,
+                                              style: fontPoppinsW400(
+                                                      appcolor: AppColors.white)
+                                                  .copyWith(fontSize: 17.sp),
+                                              decoration: getInputDecoration(
+                                                  label: "Yangi nom kiriting"),
+                                            ),
+                                            SizedBox(height: 12.h),
+                                            buttonLargeWidget(
+                                                onTap: () {
+                                                  Provider.of<ProfileViewModel>(
+                                                          context,
+                                                          listen: false)
+                                                      .updateDisplayName(
+                                                          controller.text);
+                                                  Navigator.pop(context);
+                                                },
+                                                buttonName: "O'zgartirish"),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          ProfileMenuWidget(
+                            iconSettings: AppImages.icon_camera,
+                            settingsName: "Suratni o'zgartirish",
+                            onTap: () {
+                              _showPicker(context);
+                            },
+                          ),
+                          Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  FirebaseAuth.instance.signOut();
+                                },
+                                child: SizedBox(
+                                  height: 48.h,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      SvgPicture.asset(AppImages.icon_log_out),
+                                      SizedBox(width: 10.w),
+                                      Text(
+                                        'Chiqish',
+                                        style: fontPoppinsW400(
+                                            appcolor: AppColors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+                    )
+                  : const Center(
+                      child: CircularProgressIndicator(),
+                    );
+            },
           ),
         ),
       ),
@@ -148,10 +214,11 @@ class _ProfilePageState extends State<ProfilePage> {
       setState(() {
         isLoading = true;
       });
+      if (!mounted) return;
       imageUrl = await FileUploader.imageUploader(pickedFile, 'profileImages');
-      setState(() {
-        isLoading = false;
-      });
+      if (!mounted) return;
+      Provider.of<ProfileViewModel>(context, listen: false)
+          .updatePhoto(imageUrl);
     }
   }
 
@@ -164,8 +231,9 @@ class _ProfilePageState extends State<ProfilePage> {
     if (pickedFile != null) {
       if (!mounted) return;
       imageUrl = await FileUploader.imageUploader(pickedFile, 'profileImages');
-      setState(() {
-      });
+      if (!mounted) return;
+      Provider.of<ProfileViewModel>(context, listen: false)
+          .updatePhoto(imageUrl);
     }
   }
 }

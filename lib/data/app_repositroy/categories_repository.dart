@@ -2,7 +2,7 @@ import 'package:auto_spare_part/data/models/category_model.dart';
 import 'package:auto_spare_part/widgets/toast_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class CategoryRepository {
+class   CategoryRepository {
   final FirebaseFirestore _firestore;
   CategoryRepository({required FirebaseFirestore firebaseFirestore})
       : _firestore = firebaseFirestore;
@@ -42,7 +42,7 @@ class CategoryRepository {
     }
   }
 
-  Stream<List<CategoryModel>> getCategoties() => _firestore
+  Stream<List<CategoryModel>> getCategories() => _firestore
       .collection("categories")
       .snapshots()
       .map((querySnapshot) => querySnapshot.docs

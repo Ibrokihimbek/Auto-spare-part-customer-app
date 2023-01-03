@@ -56,7 +56,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     LoginWidgets.logoWidget(image: AppImages.image_car),
                     SizedBox(height: 96.h),
                     LoginWidgets.textWidget(
-                        title: 'Sign Up', subTitle: 'Find Car Spare Parts'),
+                        title: "Ro'yxatdan o'tish", subTitle: 'Find Car Spare Parts'),
                     SizedBox(height: 44.h),
                     TextFormField(
                       controller: emailController,
@@ -64,11 +64,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (email) =>
                           email != null && !EmailValidator.validate(email)
-                              ? "Enter a valid email"
+                              ? "Yaroqli elektron pochta manzilini kiriting"
                               : null,
                       style: fontPoppinsW400(appcolor: AppColors.white)
                           .copyWith(fontSize: 17.sp),
-                      decoration: getInputDecoration(label: "Email"),
+                      decoration: getInputDecoration(label: "Email manizl kiriting"),
                     ),
                     SizedBox(height: 12.h),
                     TextFormField(
@@ -78,12 +78,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (password) =>
                           password != null && password.length < 6
-                              ? "Enter at least 6 charcter !"
+                              ? "Kamida 6 ta belgi kiriting!"
                               : null,
                       style: fontPoppinsW400(appcolor: AppColors.white)
                           .copyWith(fontSize: 17.sp),
                       decoration: getInputDecorationByPassword(
-                        label: 'Password',
+                        label: 'Parol kiriting',
                         onTap: () {
                           setState(() {
                             setState(() {
@@ -102,12 +102,12 @@ class _SignUpPageState extends State<SignUpPage> {
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (password) =>
                           password != null && password.length < 6
-                              ? "Enter at least 6 charcter !"
+                              ? "Kamida 6 ta belgi kiriting!"
                               : null,
                       style: fontPoppinsW400(appcolor: AppColors.white)
                           .copyWith(fontSize: 17.sp),
                       decoration: getInputDecorationByPassword(
-                        label: 'Coniform Password',
+                        label: 'Parolni qayta kiriting kiriting',
                         onTap: () {
                           setState(() {
                             setState(() {
@@ -120,7 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     SizedBox(height: 34.h),
                     LoginWidgets.buttonWidget(
-                      buttonName: 'Sign Up',
+                      buttonName: "Ro'yxatdan o'tish",
                       onTap: signUp,
                     ),
                     SizedBox(height: 44.h),
@@ -129,12 +129,12 @@ class _SignUpPageState extends State<SignUpPage> {
                         style: fontPoppinsW300(
                           appcolor: AppColors.white.withOpacity(0.5),
                         ).copyWith(fontSize: 14.sp),
-                        text: "Already have an account?  ",
+                        text: "Hisobingiz bormi?  ",
                         children: [
                           TextSpan(
                             recognizer: TapGestureRecognizer()
                               ..onTap = widget.onClickedSignIn,
-                            text: "Sign In",
+                            text: "Kirish",
                             style: fontPoppinsW400(
                               appcolor: AppColors.white,
                             ).copyWith(fontSize: 16.sp),
@@ -180,7 +180,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
       );
     } else {
-      getMyToast(message: "Passwords don't match!");
+      getMyToast(message: "Parollar mos emas!");
     }
   }
 

@@ -1,9 +1,12 @@
+import 'package:auto_spare_part/data/models/user_model.dart';
 import 'package:auto_spare_part/screens/auth/widgets/login_widgets.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
 import 'package:auto_spare_part/utils/app_images.dart';
 import 'package:auto_spare_part/view_model/auth_view_model.dart';
+import 'package:auto_spare_part/view_model/profile_view_model.dart';
 import 'package:auto_spare_part/widgets/font_style_widget.dart';
 import 'package:auto_spare_part/widgets/input_decoration_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,7 +47,7 @@ class _SignInPageState extends State<SignInPage> {
                   LoginWidgets.logoWidget(image: AppImages.image_car),
                   SizedBox(height: 96.h),
                   LoginWidgets.textWidget(
-                      title: 'Login', subTitle: 'Welcome to Car Spare Part'),
+                      title: 'Kirish', subTitle: 'Welcome to Car Spare Part'),
                   SizedBox(height: 44.h),
                   TextFormField(
                     controller: emailController,
@@ -52,7 +55,8 @@ class _SignInPageState extends State<SignInPage> {
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     style: fontPoppinsW400(appcolor: AppColors.white)
                         .copyWith(fontSize: 17.sp),
-                    decoration: getInputDecoration(label: "Email"),
+                    decoration:
+                        getInputDecoration(label: "Email manizl kiriting"),
                   ),
                   SizedBox(height: 12.h),
                   TextFormField(
@@ -62,7 +66,7 @@ class _SignInPageState extends State<SignInPage> {
                     style: fontPoppinsW400(appcolor: AppColors.white)
                         .copyWith(fontSize: 17.sp),
                     decoration: getInputDecorationByPassword(
-                        label: 'Password',
+                        label: 'Parol kiriting',
                         onTap: () {
                           setState(() {
                             isPas = !isPas;
@@ -72,7 +76,7 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                   SizedBox(height: 34.h),
                   LoginWidgets.buttonWidget(
-                    buttonName: 'Login',
+                    buttonName: 'Kirish',
                     onTap: signIn,
                   ),
                   SizedBox(height: 44.h),
@@ -81,12 +85,12 @@ class _SignInPageState extends State<SignInPage> {
                       style: fontPoppinsW300(
                         appcolor: AppColors.white.withOpacity(0.5),
                       ).copyWith(fontSize: 14.sp),
-                      text: "Don't have an account?  ",
+                      text: "Hisobingiz yo'qmi?  ",
                       children: [
                         TextSpan(
                           recognizer: TapGestureRecognizer()
                             ..onTap = widget.onClickSignUp,
-                          text: "Sign Up",
+                          text: "Ro'yxatdan o'tish",
                           style: fontPoppinsW400(
                             appcolor: AppColors.white,
                           ).copyWith(fontSize: 16.sp),

@@ -15,7 +15,7 @@ class CategoryViewModel extends ChangeNotifier {
   List<CategoryModel> categories = [];
 
   listenCategories() async {
-    subscription = categoryRepository.getCategoties().listen((allCategories) {
+    subscription = categoryRepository.getCategories().listen((allCategories) {
       categories = allCategories;
       notifyListeners();
     });

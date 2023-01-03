@@ -1,11 +1,8 @@
-import 'package:auto_spare_part/data/models/user_model.dart';
 import 'package:auto_spare_part/screens/bottom_nav/home/home_page.dart';
 import 'package:auto_spare_part/screens/bottom_nav/profile/profile_page.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
 import 'package:auto_spare_part/utils/app_images.dart';
 import 'package:auto_spare_part/view_model/bottom_nav_view_model.dart';
-import 'package:auto_spare_part/view_model/profile_view_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
@@ -27,22 +24,12 @@ class _BottomNavPageState extends State<BottomNavPage> {
     FirebaseMessaging.instance.subscribeToTopic("users");
   }
 
-  _printFCMToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    if (!mounted) return;
-    UserModel? userModel =
-        Provider.of<ProfileViewModel>(context, listen: false).userModel;
-    if (userModel != null) {
-      Provider.of<ProfileViewModel>(context, listen: false).updateFCMToken(
-          token ?? '', userModel.docId, FirebaseAuth.instance.currentUser!.uid);
-    }
-  }
+ 
 
   @override
   void initState() {
     screens.add(HomePage());
     screens.add(ProfilePage());
-    _printFCMToken();
     _subscribetopic();
     super.initState();
   }

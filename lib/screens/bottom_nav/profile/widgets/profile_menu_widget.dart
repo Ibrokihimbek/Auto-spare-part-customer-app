@@ -6,14 +6,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class ProfileMenuWidget extends StatelessWidget {
-  final String? menuName;
   final String iconSettings;
   final String settingsName;
   final VoidCallback onTap;
 
   const ProfileMenuWidget({
     super.key,
-    this.menuName,
     required this.iconSettings,
     required this.settingsName,
     required this.onTap,
@@ -24,14 +22,6 @@ class ProfileMenuWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        menuName == null
-            ? const SizedBox()
-            : Text(
-                menuName!,
-                style: fontPoppinsW400(appcolor: AppColors.white)
-                    .copyWith(fontSize: 14.sp),
-              ),
-        SizedBox(height: menuName == '' ? 0 : 4.h),
         InkWell(
           onTap: onTap,
           child: SizedBox(

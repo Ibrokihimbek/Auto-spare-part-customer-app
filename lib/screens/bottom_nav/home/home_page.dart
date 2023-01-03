@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Consumer<CategoryViewModel>(
-        builder: ((context, categoryViewModel, child) {
+        builder: (context, categoryViewModel, child) {
           return Column(
             children: [
               ListView.builder(
@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           );
-        }),
+        },
       ),
     );
   }

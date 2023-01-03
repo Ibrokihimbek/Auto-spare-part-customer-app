@@ -1,6 +1,5 @@
 import 'package:auto_spare_part/data/app_repositroy/auth_repository.dart';
 import 'package:auto_spare_part/data/app_repositroy/categories_repository.dart';
-import 'package:auto_spare_part/data/app_repositroy/order_repository.dart';
 import 'package:auto_spare_part/data/app_repositroy/products_repository.dart';
 import 'package:auto_spare_part/screens/app_router.dart';
 import 'package:auto_spare_part/screens/auth/auth_page.dart';
@@ -8,7 +7,6 @@ import 'package:auto_spare_part/screens/bottom_nav/bottom_navigation_page.dart';
 import 'package:auto_spare_part/view_model/auth_view_model.dart';
 import 'package:auto_spare_part/view_model/bottom_nav_view_model.dart';
 import 'package:auto_spare_part/view_model/category_view_model.dart';
-import 'package:auto_spare_part/view_model/order_view_model.dart';
 import 'package:auto_spare_part/view_model/product_view_model.dart';
 import 'package:auto_spare_part/view_model/profile_view_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -39,13 +37,7 @@ void main() async {
             productRepository: ProductRepository(firebaseFirestore: fireStore),
           ),
         ),
-        ChangeNotifierProvider(
-          create: (context) => OrdersViewModel(
-            ordersRepository: OrdersRepository(
-              firebaseFirestore: fireStore,
-            ),
-          ),
-        ),
+        
         ChangeNotifierProvider(
           create: (context) => ProfileViewModel(
               firebaseAuth: FirebaseAuth.instance,
