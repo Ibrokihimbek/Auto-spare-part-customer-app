@@ -56,7 +56,8 @@ class _SignUpPageState extends State<SignUpPage> {
                     LoginWidgets.logoWidget(image: AppImages.image_car),
                     SizedBox(height: 96.h),
                     LoginWidgets.textWidget(
-                        title: "Ro'yxatdan o'tish", subTitle: 'Find Car Spare Parts'),
+                        title: "Ro'yxatdan o'tish",
+                        subTitle: 'Find Car Spare Parts'),
                     SizedBox(height: 44.h),
                     TextFormField(
                       controller: emailController,
@@ -68,7 +69,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               : null,
                       style: fontPoppinsW400(appcolor: AppColors.white)
                           .copyWith(fontSize: 17.sp),
-                      decoration: getInputDecoration(label: "Email manizl kiriting"),
+                      decoration:
+                          getInputDecoration(label: "Email manizl kiriting"),
                     ),
                     SizedBox(height: 12.h),
                     TextFormField(
@@ -167,7 +169,7 @@ class _SignUpPageState extends State<SignUpPage> {
       );
       String? fcmToken = await FirebaseMessaging.instance.getToken();
       if (!mounted) return;
-      Provider.of<ProfileViewModel>(context, listen: false).addUser(
+      await Provider.of<ProfileViewModel>(context, listen: false).addUser(
         UserModel(
           docId: "",
           age: 0,

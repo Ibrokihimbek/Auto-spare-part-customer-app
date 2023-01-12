@@ -1,5 +1,6 @@
 import 'package:auto_spare_part/data/app_repositroy/auth_repository.dart';
 import 'package:auto_spare_part/data/app_repositroy/categories_repository.dart';
+import 'package:auto_spare_part/data/app_repositroy/info_repository.dart';
 import 'package:auto_spare_part/data/app_repositroy/products_repository.dart';
 import 'package:auto_spare_part/screens/app_router.dart';
 import 'package:auto_spare_part/screens/auth/auth_page.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'data/app_repositroy/profile_repository.dart';
+import 'view_model/info_view_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,12 +39,17 @@ void main() async {
             productRepository: ProductRepository(firebaseFirestore: fireStore),
           ),
         ),
-        
         ChangeNotifierProvider(
           create: (context) => ProfileViewModel(
               firebaseAuth: FirebaseAuth.instance,
               profileRepository:
                   ProfileRepository(firebaseFirestore: fireStore)),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => InfoViewModel(
+            infoStoreRepository:
+                InfoStoreRepository(firebaseFirestore: fireStore),
+          ),
         ),
         Provider(
           create: (context) => AuthViewModel(

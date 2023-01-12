@@ -1,3 +1,4 @@
+import 'package:auto_spare_part/data/app_repositroy/profile_repository.dart';
 import 'package:auto_spare_part/data/models/user_model.dart';
 import 'package:auto_spare_part/data/service/file_uploader.dart';
 import 'package:auto_spare_part/screens/bottom_nav/profile/widgets/profile_menu_widget.dart';
@@ -8,6 +9,7 @@ import 'package:auto_spare_part/widgets/button_large.dart';
 import 'package:auto_spare_part/widgets/font_style_widget.dart';
 import 'package:auto_spare_part/widgets/input_decoration_widget.dart';
 import 'package:auto_spare_part/widgets/toast_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,156 +32,169 @@ class _ProfilePageState extends State<ProfilePage> {
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: SafeArea(
-          child: Consumer<ProfileViewModel>(
-            builder: (context, viewModel, child) {
-              var userInfo = viewModel.userModel;
-              return viewModel.userModel != null
-                  ? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24).r,
-                      child: Column(
-                        children: [
-                          SizedBox(height: 20.h),
-                          Container(
-                            width: 100.w,
-                            height: 100.h,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: userInfo!.imageUrl == ''
-                                  ? const DecorationImage(
-                                      image: AssetImage(AppImages.image_car),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : DecorationImage(
-                                      image: NetworkImage(
-                                        userInfo.imageUrl,
+    return ChangeNotifierProvider(
+      create: (context) => ProfileViewModel(
+        firebaseAuth: FirebaseAuth.instance,
+        profileRepository:
+            ProfileRepository(firebaseFirestore: FirebaseFirestore.instance),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: SafeArea(
+            child: Consumer<ProfileViewModel>(
+              builder: (context, viewModel, child) {
+                var userInfo = viewModel.userModel;
+                return viewModel.userModel != null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24).r,
+                        child: Column(
+                          children: [
+                            SizedBox(height: 20.h),
+                            Container(
+                              width: 100.w,
+                              height: 100.h,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: userInfo!.imageUrl == ''
+                                    ? const DecorationImage(
+                                        image: AssetImage(AppImages.image_car),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : DecorationImage(
+                                        image: NetworkImage(
+                                          userInfo.imageUrl,
+                                        ),
+                                        fit: BoxFit.cover,
                                       ),
-                                      fit: BoxFit.cover,
-                                    ),
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 10.h),
-                          Text(
-                            userInfo.fullName.isEmpty
-                                ? 'Foydalanuvchi nomi'
-                                : userInfo.fullName,
-                            style: fontPoppinsW500(appcolor: AppColors.white)
-                                .copyWith(fontSize: 20.sp),
-                          ),
-                          SizedBox(height: 32.h),
-                          ProfileMenuWidget(
-                            iconSettings: AppImages.icon_profile,
-                            settingsName: "Nomni o'zgartirish",
-                            onTap: () {
-                              showDialog(
-                                barrierDismissible: false,
-                                context: context,
-                                builder: (context) {
-                                  return Dialog(
-                                    backgroundColor: AppColors.C_393B40,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(15.r),
-                                        border: Border.all(
-                                          color: AppColors.white,
-                                          width: 1,
+                            SizedBox(height: 10.h),
+                            Text(
+                              userInfo.fullName.isEmpty
+                                  ? userInfo.email
+                                  : userInfo.fullName,
+                              style: fontPoppinsW500(appcolor: AppColors.white)
+                                  .copyWith(fontSize: 20.sp),
+                            ),
+                            SizedBox(height: 32.h),
+                            ProfileMenuWidget(
+                              iconSettings: AppImages.icon_profile,
+                              settingsName: "Nomni o'zgartirish",
+                              onTap: () {
+                                showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      backgroundColor: AppColors.C_393B40,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          border: Border.all(
+                                            color: AppColors.white,
+                                            width: 1,
+                                          ),
                                         ),
-                                      ),
-                                      height: 200,
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 12,
-                                          vertical: 8,
-                                        ).r,
-                                        child: Column(
-                                          children: [
-                                            SizedBox(height: 12.h),
-                                            TextFormField(
-                                              controller: controller,
-                                              textInputAction:
-                                                  TextInputAction.next,
-                                              autovalidateMode: AutovalidateMode
-                                                  .onUserInteraction,
-                                              style: fontPoppinsW400(
-                                                      appcolor: AppColors.white)
-                                                  .copyWith(fontSize: 17.sp),
-                                              decoration: getInputDecoration(
-                                                  label: "Yangi nom kiriting"),
-                                            ),
-                                            SizedBox(height: 12.h),
-                                            buttonLargeWidget(
-                                                onTap: () {
-                                                  Provider.of<ProfileViewModel>(
-                                                          context,
-                                                          listen: false)
-                                                      .updateUser(UserModel(
-                                                    age: userInfo.age,
-                                                    userId: userInfo.userId,
-                                                    docId: userInfo.docId,
-                                                    fullName: controller.text,
-                                                    email: userInfo.email,
-                                                    createdAt: DateTime.now()
-                                                        .toString(),
-                                                    imageUrl: userInfo.imageUrl,
-                                                    fcmToken: userInfo.fcmToken,
-                                                  ));
+                                        height: 200,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 12,
+                                            vertical: 8,
+                                          ).r,
+                                          child: Column(
+                                            children: [
+                                              SizedBox(height: 12.h),
+                                              TextFormField(
+                                                controller: controller,
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                autovalidateMode:
+                                                    AutovalidateMode
+                                                        .onUserInteraction,
+                                                style: fontPoppinsW400(
+                                                        appcolor:
+                                                            AppColors.white)
+                                                    .copyWith(fontSize: 17.sp),
+                                                decoration: getInputDecoration(
+                                                    label:
+                                                        "Yangi nom kiriting"),
+                                              ),
+                                              SizedBox(height: 12.h),
+                                              buttonLargeWidget(
+                                                  onTap: () {
+                                                    Provider.of<ProfileViewModel>(
+                                                            context,
+                                                            listen: false)
+                                                        .updateUser(UserModel(
+                                                      age: userInfo.age,
+                                                      userId: userInfo.userId,
+                                                      docId: userInfo.docId,
+                                                      fullName: controller.text,
+                                                      email: userInfo.email,
+                                                      createdAt: DateTime.now()
+                                                          .toString(),
+                                                      imageUrl:
+                                                          userInfo.imageUrl,
+                                                      fcmToken:
+                                                          userInfo.fcmToken,
+                                                    ));
 
-                                                  Navigator.pop(context);
-                                                },
-                                                buttonName: "O'zgartirish"),
-                                          ],
+                                                    Navigator.pop(context);
+                                                  },
+                                                  buttonName: "O'zgartirish"),
+                                            ],
+                                          ),
                                         ),
                                       ),
+                                    );
+                                  },
+                                );
+                              },
+                            ),
+                            ProfileMenuWidget(
+                              iconSettings: AppImages.icon_camera,
+                              settingsName: "Suratni o'zgartirish",
+                              onTap: () {
+                                _showPicker(context, userInfo);
+                              },
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    await FirebaseAuth.instance.signOut();
+                                  },
+                                  child: SizedBox(
+                                    height: 48.h,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SvgPicture.asset(
+                                            AppImages.icon_log_out),
+                                        SizedBox(width: 10.w),
+                                        Text(
+                                          'Chiqish',
+                                          style: fontPoppinsW400(
+                                              appcolor: AppColors.white),
+                                        ),
+                                      ],
                                     ),
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                          ProfileMenuWidget(
-                            iconSettings: AppImages.icon_camera,
-                            settingsName: "Suratni o'zgartirish",
-                            onTap: () {
-                              _showPicker(context, userInfo);
-                            },
-                          ),
-                          Row(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  FirebaseAuth.instance.signOut();
-                                },
-                                child: SizedBox(
-                                  height: 48.h,
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      SvgPicture.asset(AppImages.icon_log_out),
-                                      SizedBox(width: 10.w),
-                                      Text(
-                                        'Chiqish',
-                                        style: fontPoppinsW400(
-                                            appcolor: AppColors.white),
-                                      ),
-                                    ],
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  : const Center(
-                      child: CircularProgressIndicator(),
-                    );
-            },
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      );
+              },
+            ),
           ),
         ),
       ),

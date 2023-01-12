@@ -1,5 +1,5 @@
 import 'package:auto_spare_part/screens/bottom_nav/home/home_page.dart';
-import 'package:auto_spare_part/screens/bottom_nav/location/location_page..dart';
+import 'package:auto_spare_part/screens/bottom_nav/info_store/info_store_page..dart';
 import 'package:auto_spare_part/screens/bottom_nav/profile/profile_page.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
 import 'package:auto_spare_part/utils/app_images.dart';
