@@ -128,19 +128,23 @@ class _ProfilePageState extends State<ProfilePage> {
                                                     Provider.of<ProfileViewModel>(
                                                             context,
                                                             listen: false)
-                                                        .updateUser(UserModel(
-                                                      age: userInfo.age,
-                                                      userId: userInfo.userId,
-                                                      docId: userInfo.docId,
-                                                      fullName: controller.text,
-                                                      email: userInfo.email,
-                                                      createdAt: DateTime.now()
-                                                          .toString(),
-                                                      imageUrl:
-                                                          userInfo.imageUrl,
-                                                      fcmToken:
-                                                          userInfo.fcmToken,
-                                                    ));
+                                                        .updateUser(
+                                                      UserModel(
+                                                        age: userInfo.age,
+                                                        userId: userInfo.userId,
+                                                        docId: userInfo.docId,
+                                                        fullName:
+                                                            controller.text,
+                                                        email: userInfo.email,
+                                                        createdAt:
+                                                            DateTime.now()
+                                                                .toString(),
+                                                        imageUrl:
+                                                            userInfo.imageUrl,
+                                                        fcmToken:
+                                                            userInfo.fcmToken,
+                                                      ),
+                                                    );
 
                                                     Navigator.pop(context);
                                                   },
