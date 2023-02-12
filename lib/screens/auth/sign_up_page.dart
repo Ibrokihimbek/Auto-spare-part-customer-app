@@ -64,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       textInputAction: TextInputAction.next,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (email) =>
-                          email != null && !EmailValidator.validate(email)
+                          email != null && !EmailValidator.validate(email.trim())
                               ? "Yaroqli elektron pochta manzilini kiriting"
                               : null,
                       style: fontPoppinsW400(appcolor: AppColors.white)

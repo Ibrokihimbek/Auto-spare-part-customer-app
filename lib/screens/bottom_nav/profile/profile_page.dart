@@ -1,6 +1,7 @@
 import 'package:auto_spare_part/data/app_repositroy/profile_repository.dart';
 import 'package:auto_spare_part/data/models/user_model.dart';
 import 'package:auto_spare_part/data/service/file_uploader.dart';
+import 'package:auto_spare_part/screens/app_router.dart';
 import 'package:auto_spare_part/screens/bottom_nav/profile/widgets/profile_menu_widget.dart';
 import 'package:auto_spare_part/utils/app_colors.dart';
 import 'package:auto_spare_part/utils/app_images.dart';
@@ -170,6 +171,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 InkWell(
                                   onTap: () async {
                                     await FirebaseAuth.instance.signOut();
+                                    Navigator.pushReplacementNamed(
+                                        context, RouteName.main);
                                   },
                                   child: SizedBox(
                                     height: 48.h,
@@ -178,7 +181,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         SvgPicture.asset(
-                                            AppImages.icon_log_out),
+                                          AppImages.icon_log_out,
+                                        ),
                                         SizedBox(width: 10.w),
                                         Text(
                                           'Chiqish',
